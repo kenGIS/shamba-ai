@@ -45,7 +45,6 @@ export default function Home() {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Area Line Chart',
         data: [10, 15, 12, 20, 25, 18],
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -68,7 +67,6 @@ export default function Home() {
     labels: ['Metric 1', 'Metric 2', 'Metric 3', 'Metric 4', 'Metric 5'],
     datasets: [
       {
-        label: 'Radar Chart',
         data: [65, 59, 90, 81, 56],
         backgroundColor: 'rgba(153, 102, 255, 0.2)',
         borderColor: 'rgb(153, 102, 255)',
@@ -133,33 +131,20 @@ export default function Home() {
       <div className="col-span-2 grid grid-cols-2 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         {/* Area Line Chart */}
         <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <h2 className="text-center text-sm text-emerald-400">Area Line Chart</h2>
-          <Line data={areaLineData} />
+          <Line data={areaLineData} options={{ plugins: { legend: { display: false } } }} />
         </div>
 
         {/* Radial Bar Chart */}
         <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <h2 className="text-center text-sm text-emerald-400">Radial Bar Chart</h2>
-          <PolarArea data={radialBarData} />
+          <PolarArea data={radialBarData} options={{ plugins: { legend: { display: false } } }} />
         </div>
 
         {/* Radar Chart */}
         <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <h2 className="text-center text-sm text-emerald-400">Radar Chart</h2>
-          <Radar data={radarData} />
+          <Radar data={radarData} options={{ plugins: { legend: { display: false } } }} />
         </div>
 
         {/* Proportional Area Chart */}
         <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <h2 className="text-center text-sm text-emerald-400">Proportional Area Chart</h2>
-          <Doughnut data={proportionalAreaData} />
-        </div>
-
-        {/* Map */}
-        <div className="col-span-2 bg-gray-700/50 p-4 rounded-lg h-[50vh]">
-          {memoizedMap}
-        </div>
-      </div>
-    </div>
-  );
-}
+          <Doughnut data={proportionalAreaData} options={{ plugins: { legend: { display: false } } }} />
+      
