@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, LayersControl } from 'react-leaflet';
-import HeatmapLayer from "react-leaflet-heatmap-layer";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -17,13 +16,6 @@ export default function Map() {
   if (!isClient) {
     return <div>Loading map...</div>;
   }
-
-  // Example heatmap data
-  const heatmapData = [
-    { lat: -1.064, lng: 37.134, intensity: 1 },
-    { lat: -1.065, lng: 37.135, intensity: 0.8 },
-    { lat: -1.066, lng: 37.136, intensity: 0.6 },
-  ];
 
   return (
     <div
@@ -64,15 +56,12 @@ export default function Map() {
             />
           </BaseLayer>
 
-          {/* Simulated Heatmap */}
-          <Overlay name="Simulated Heatmap">
-            <HeatmapLayer
-              fitBoundsOnLoad
-              fitBoundsOnUpdate
-              points={heatmapData}
-              longitudeExtractor={(point) => point.lng}
-              latitudeExtractor={(point) => point.lat}
-              intensityExtractor={(point) => point.intensity}
+          {/* Dummy Heatmap Layer */}
+          <Overlay name="Thematic Heatmap">
+            <TileLayer
+              url="https://stamen-tiles.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://stamen.com/">Stamen Design</a>'
+              opacity={0.7} // Slight transparency for overlay effect
             />
           </Overlay>
         </LayersControl>
