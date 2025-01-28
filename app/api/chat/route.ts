@@ -7,12 +7,13 @@ export async function POST(req: Request) {
     // Debugging: Log raw request
     console.log("Request received:", req);
 
-    // Parse and validate the request body
+    // Parse the JSON body
     let body;
     try {
-      body = await req.json();
+      body = await req.json(); // Attempt to parse the request body
+      console.log("Parsed body:", body);
     } catch (error) {
-      console.error("Failed to parse request body:", error);
+      console.error("Failed to parse JSON body:", error);
       return new Response(
         JSON.stringify({ error: "Invalid JSON in request body" }),
         { status: 400 }
@@ -21,14 +22,14 @@ export async function POST(req: Request) {
 
     const { prompt } = body;
 
+    // Validate the prompt
     if (!prompt || typeof prompt !== "string") {
-      console.error("Invalid or missing prompt");
+      console.error("Invalid or missing prompt:", prompt);
       return new Response(JSON.stringify({ error: "Invalid or missing prompt" }), {
         status: 400,
       });
     }
 
-    // Debugging: Log the received prompt
     console.log("Prompt received:", prompt);
 
     // Check if OpenAI API Key is present
@@ -39,7 +40,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Log the request payload for debugging
     console.log("Request Payload:", {
       model: "gpt-4",
       messages: [{ role: "user", content: prompt }],
@@ -59,7 +59,6 @@ export async function POST(req: Request) {
       }),
     });
 
-    // Handle OpenAI API errors
     if (!response.ok) {
       const error = await response.json().catch(() => ({
         error: { message: "Unknown error" },
@@ -78,7 +77,7 @@ export async function POST(req: Request) {
         const reader = response.body?.getReader();
 
         if (!reader) {
-          console.error("Failed to get response reader from OpenAI");
+          console.error("Failed to create reader for OpenAI response");
           controller.close();
           return;
         }
@@ -87,7 +86,6 @@ export async function POST(req: Request) {
           const { done, value } = await reader.read();
           if (done) break;
 
-          // Decode and enqueue the streamed chunks
           const chunk = decoder.decode(value);
           controller.enqueue(new TextEncoder().encode(chunk));
         }
@@ -98,7 +96,6 @@ export async function POST(req: Request) {
 
     return new StreamingTextResponse(stream);
   } catch (error) {
-    // General error handling
     console.error("Error in chat route:", error);
     return new Response(
       JSON.stringify({ error: "Internal server error. Please try again later." }),
