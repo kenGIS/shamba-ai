@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { prompt } = await req.json();
 
     if (!prompt) {
-      throw new Error("No prompt provided");
+      return new Response(JSON.stringify({ error: "No prompt provided" }), { status: 400 });
     }
 
     // Call the OpenAI API
@@ -26,8 +26,10 @@ export async function POST(req: Request) {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error.message || "Error in OpenAI API call");
+      return new Response(
+        JSON.stringify({ error: `OpenAI API error: ${response.statusText}` }),
+        { status: response.status }
+      );
     }
 
     // Stream the response back to the client
@@ -37,13 +39,15 @@ export async function POST(req: Request) {
         const reader = response.body?.getReader();
 
         if (!reader) {
-          throw new Error("Failed to get response reader");
+          controller.close();
+          throw new Error("Failed to create a reader for OpenAI response.");
         }
 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
 
+          // Decode and enqueue the streamed chunks
           const chunk = decoder.decode(value);
           controller.enqueue(new TextEncoder().encode(chunk));
         }
@@ -54,7 +58,10 @@ export async function POST(req: Request) {
 
     return new StreamingTextResponse(stream);
   } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error("Error in chat route:", error);
+    return new Response(
+      JSON.stringify({ error: "Internal server error. Please try again later." }),
+      { status: 500 }
+    );
   }
 }
