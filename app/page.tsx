@@ -130,70 +130,33 @@ export default function Home() {
       </div>
 
       {/* Visualization Panel */}
-      <div className="col-span-2 grid grid-rows-4 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
+      <div className="col-span-2 grid grid-cols-2 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         {/* Area Line Chart */}
-        <div className="row-span-1 flex">
-          <div className="w-3/4 bg-gray-700/50 p-4 rounded-lg">
-            <Line data={areaLineData} />
-          </div>
-          <div className="w-1/4 flex items-center justify-center text-emerald-300">
-            <ul>
-              <li>Jan: 10</li>
-              <li>Feb: 15</li>
-              <li>Mar: 12</li>
-              <li>Apr: 20</li>
-              <li>May: 25</li>
-              <li>Jun: 18</li>
-            </ul>
-          </div>
+        <div className="bg-gray-700/50 p-2 rounded-lg">
+          <h2 className="text-center text-sm text-emerald-400">Area Line Chart</h2>
+          <Line data={areaLineData} />
         </div>
 
         {/* Radial Bar Chart */}
-        <div className="row-span-1 flex">
-          <div className="w-3/4 bg-gray-700/50 p-4 rounded-lg">
-            <PolarArea data={radialBarData} />
-          </div>
-          <div className="w-1/4 flex items-center justify-center text-emerald-300">
-            <ul>
-              <li>Category A: 70%</li>
-              <li>Category B: 50%</li>
-              <li>Category C: 90%</li>
-            </ul>
-          </div>
+        <div className="bg-gray-700/50 p-2 rounded-lg">
+          <h2 className="text-center text-sm text-emerald-400">Radial Bar Chart</h2>
+          <PolarArea data={radialBarData} />
         </div>
 
         {/* Radar Chart */}
-        <div className="row-span-1 flex">
-          <div className="w-3/4 bg-gray-700/50 p-4 rounded-lg">
-            <Radar data={radarData} />
-          </div>
-          <div className="w-1/4 flex items-center justify-center text-emerald-300">
-            <ul>
-              <li>Metric 1: 65</li>
-              <li>Metric 2: 59</li>
-              <li>Metric 3: 90</li>
-              <li>Metric 4: 81</li>
-              <li>Metric 5: 56</li>
-            </ul>
-          </div>
+        <div className="bg-gray-700/50 p-2 rounded-lg">
+          <h2 className="text-center text-sm text-emerald-400">Radar Chart</h2>
+          <Radar data={radarData} />
         </div>
 
         {/* Proportional Area Chart */}
-        <div className="row-span-1 flex">
-          <div className="w-3/4 bg-gray-700/50 p-4 rounded-lg">
-            <Doughnut data={proportionalAreaData} />
-          </div>
-          <div className="w-1/4 flex items-center justify-center text-emerald-300">
-            <ul>
-              <li>Segment A: 300</li>
-              <li>Segment B: 500</li>
-              <li>Segment C: 200</li>
-            </ul>
-          </div>
+        <div className="bg-gray-700/50 p-2 rounded-lg">
+          <h2 className="text-center text-sm text-emerald-400">Proportional Area Chart</h2>
+          <Doughnut data={proportionalAreaData} />
         </div>
 
         {/* Map */}
-        <div className="row-span-2 bg-gray-700/50 p-4 rounded-lg h-[40vh]">
+        <div className="col-span-2 bg-gray-700/50 p-4 rounded-lg h-[40vh]">
           {memoizedMap}
         </div>
       </div>
