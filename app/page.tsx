@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 
 // Dynamic import for the map to avoid SSR issues
-const Map = dynamic(() => import('@/components/map'), { ssr: false });
+const Map = dynamic(() => import('../components/map'), { ssr: false });
 
 export default function Home() {
   return (
