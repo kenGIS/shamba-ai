@@ -14,12 +14,12 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900 grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+    <div className="min-h-screen bg-gray-900 grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
       {/* Chat Panel */}
-      <div className="lg:col-span-1 space-y-6 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
+      <div className="lg:col-span-3 space-y-6 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         <h1 className="text-3xl font-bold text-emerald-400">SHAMBA.AI</h1>
         
-        <div className="h-[60vh] overflow-y-auto space-y-4">
+        <div className="h-[70vh] overflow-y-auto space-y-4">
           {messages.map((msg, index) => (
             <motion.div
               key={index}
@@ -49,7 +49,7 @@ export default function Home() {
       </div>
 
       {/* Map Panel */}
-      <div className="lg:col-span-2 relative">
+      <div className="lg:col-span-1 relative">
         <Map />
       </div>
     </div>
