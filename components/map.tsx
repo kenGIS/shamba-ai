@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, LayersControl } from 'react-leaflet';
 
-const { BaseLayer } = LayersControl;
+const { BaseLayer, Overlay } = LayersControl;
 
 export default function Map() {
   const [isClient, setIsClient] = useState(false);
@@ -55,6 +55,15 @@ export default function Map() {
               attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
             />
           </BaseLayer>
+
+          {/* Dummy Heatmap Layer */}
+          <Overlay name="Thematic Heatmap">
+            <TileLayer
+              url="https://stamen-tiles.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://stamen.com/">Stamen Design</a>'
+              opacity={0.7} // Slight transparency for overlay effect
+            />
+          </Overlay>
         </LayersControl>
       </MapContainer>
     </div>
