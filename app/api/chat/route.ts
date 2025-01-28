@@ -4,10 +4,23 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
   try {
-    // Parse the incoming request to get the user prompt
-    const { prompt } = await req.json();
+    // Debugging: Log raw request
+    console.log("Request received:", req);
 
-    // Validate the prompt
+    // Parse and validate the request body
+    let body;
+    try {
+      body = await req.json();
+    } catch (error) {
+      console.error("Failed to parse request body:", error);
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON in request body" }),
+        { status: 400 }
+      );
+    }
+
+    const { prompt } = body;
+
     if (!prompt || typeof prompt !== "string") {
       console.error("Invalid or missing prompt");
       return new Response(JSON.stringify({ error: "Invalid or missing prompt" }), {
@@ -18,7 +31,7 @@ export async function POST(req: Request) {
     // Debugging: Log the received prompt
     console.log("Prompt received:", prompt);
 
-    // Debugging: Check if OpenAI API Key is present
+    // Check if OpenAI API Key is present
     if (!process.env.OPENAI_API_KEY) {
       console.error("OpenAI API Key is missing");
       return new Response(JSON.stringify({ error: "OpenAI API Key is not set" }), {
@@ -48,7 +61,9 @@ export async function POST(req: Request) {
 
     // Handle OpenAI API errors
     if (!response.ok) {
-      const error = await response.json();
+      const error = await response.json().catch(() => ({
+        error: { message: "Unknown error" },
+      }));
       console.error("OpenAI API Error:", error);
       return new Response(
         JSON.stringify({ error: `OpenAI API error: ${error.error.message || "Unknown error"}` }),
