@@ -2,12 +2,11 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { Line } from 'react-chartjs-2';
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Filler, RadialLinearScale, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Line, PolarArea, Radar, Doughnut } from 'react-chartjs-2';
 
 // Register chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, RadialLinearScale, ArcElement, Tooltip, Legend);
 
 const Map = dynamic(() => import('../components/map'), {
   ssr: false,
@@ -33,7 +32,6 @@ export default function Home() {
     setMessages([...messages, { role: "user", content: input }]);
     setInput("");
 
-    // Add dummy AI response logic here
     setMessages((prev) => [
       ...prev,
       { role: "assistant", content: "Placeholder response for now." },
@@ -42,26 +40,51 @@ export default function Home() {
 
   const memoizedMap = useMemo(() => <Map />, []);
 
-  // Placeholder data for the visualizations
-  const lineData = {
+  // Placeholder data for visualizations
+  const areaLineData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Line Chart Example',
-        data: [12, 19, 3, 5, 2, 3],
+        label: 'Area Line Chart',
+        data: [10, 15, 12, 20, 25, 18],
         borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
       },
     ],
   };
 
-  const pieData = {
+  const radialBarData = {
     labels: ['Category A', 'Category B', 'Category C'],
     datasets: [
       {
-        label: 'Pie Chart Example',
-        data: [30, 50, 20],
+        label: 'Radial Bar Chart',
+        data: [70, 50, 90],
         backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)'],
+        hoverOffset: 4,
+      },
+    ],
+  };
+
+  const radarData = {
+    labels: ['Metric 1', 'Metric 2', 'Metric 3', 'Metric 4', 'Metric 5'],
+    datasets: [
+      {
+        label: 'Radar Chart',
+        data: [65, 59, 90, 81, 56],
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgb(153, 102, 255)',
+        pointBackgroundColor: 'rgb(153, 102, 255)',
+      },
+    ],
+  };
+
+  const proportionalAreaData = {
+    labels: ['Segment A', 'Segment B', 'Segment C'],
+    datasets: [
+      {
+        data: [300, 500, 200],
+        backgroundColor: ['rgb(255, 99, 132)', 'rgb(75, 192, 192)', 'rgb(255, 205, 86)'],
       },
     ],
   };
@@ -112,16 +135,28 @@ export default function Home() {
       <div className="col-span-2 space-y-6 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         {/* Visualizations */}
         <div className="grid grid-cols-2 gap-4">
-          {/* Line Chart */}
+          {/* Area Line Chart */}
           <div className="bg-gray-700/50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-emerald-400 mb-4">Line Chart</h2>
-            <Line data={lineData} />
+            <h2 className="text-xl font-bold text-emerald-400 mb-4">Area Line Chart</h2>
+            <Line data={areaLineData} />
           </div>
 
-          {/* Pie Chart */}
+          {/* Radial Bar Chart */}
           <div className="bg-gray-700/50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-emerald-400 mb-4">Pie Chart</h2>
-            <Pie data={pieData} />
+            <h2 className="text-xl font-bold text-emerald-400 mb-4">Radial Bar Chart</h2>
+            <PolarArea data={radialBarData} />
+          </div>
+
+          {/* Radar Chart */}
+          <div className="bg-gray-700/50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-emerald-400 mb-4">Radar Chart</h2>
+            <Radar data={radarData} />
+          </div>
+
+          {/* Nested Proportional Area Chart */}
+          <div className="bg-gray-700/50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-emerald-400 mb-4">Proportional Area Chart</h2>
+            <Doughnut data={proportionalAreaData} />
           </div>
         </div>
 
