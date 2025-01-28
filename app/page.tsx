@@ -134,28 +134,24 @@ export default function Home() {
       {/* Visualization Panel */}
       <div className="col-span-2 space-y-6 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         {/* Visualizations */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {/* Area Line Chart */}
-          <div className="bg-gray-700/50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-emerald-400 mb-4">Area Line Chart</h2>
+          <div className="col-span-2 bg-gray-700/50 p-2 rounded-lg h-[20vh]">
             <Line data={areaLineData} />
           </div>
 
           {/* Radial Bar Chart */}
-          <div className="bg-gray-700/50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-emerald-400 mb-4">Radial Bar Chart</h2>
+          <div className="col-span-2 bg-gray-700/50 p-2 rounded-lg h-[20vh]">
             <PolarArea data={radialBarData} />
           </div>
 
           {/* Radar Chart */}
-          <div className="bg-gray-700/50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-emerald-400 mb-4">Radar Chart</h2>
+          <div className="col-span-2 bg-gray-700/50 p-2 rounded-lg h-[20vh]">
             <Radar data={radarData} />
           </div>
 
           {/* Nested Proportional Area Chart */}
-          <div className="bg-gray-700/50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-emerald-400 mb-4">Proportional Area Chart</h2>
+          <div className="col-span-2 bg-gray-700/50 p-2 rounded-lg h-[20vh]">
             <Doughnut data={proportionalAreaData} />
           </div>
         </div>
