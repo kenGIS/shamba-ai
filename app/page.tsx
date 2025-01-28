@@ -14,7 +14,7 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-red-500 grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
+    <div className="min-h-screen bg-gray-900 grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
       {/* Chat Panel */}
       <div className="lg:col-span-3 space-y-6 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         <h1 className="text-3xl font-bold text-emerald-400">SHAMBA.AI</h1>
