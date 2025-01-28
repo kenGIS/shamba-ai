@@ -40,10 +40,18 @@ export default function Map() {
             />
           </BaseLayer>
 
-          {/* Google Earth Imagery Basemap */}
+          {/* Google Earth Imagery (Satellite Only) */}
           <BaseLayer name="Google Earth Imagery">
             <TileLayer
               url="http://www.google.cn/maps/vt?lyrs=s&x={x}&y={y}&z={z}"
+              attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+            />
+          </BaseLayer>
+
+          {/* Google Earth Hybrid (Satellite + Labels) */}
+          <BaseLayer name="Google Earth Hybrid">
+            <TileLayer
+              url="http://www.google.cn/maps/vt?lyrs=y&x={x}&y={y}&z={z}"
               attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
             />
           </BaseLayer>
