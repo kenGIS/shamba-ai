@@ -1,27 +1,45 @@
 'use client';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 
 export default function Map() {
-  const [isBrowser, setIsBrowser] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsBrowser(true); // Ensure Leaflet only initializes on the client
+    setIsClient(true);
   }, []);
 
-  if (!isBrowser) return null;
+  if (!isClient) {
+    return <div>Loading map...</div>;
+  }
+
+  const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
+    ssr: false,
+  });
+  const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
+    ssr: false,
+  });
 
   return (
-    <MapContainer
-      center={[-1.2921, 36.8219]} // Nairobi, Kenya
-      zoom={8}
-      style={{ height: '100%', width: '100%' }}
+    <div
+      style={{
+        height: '100vh',
+        width: '100%',
+        backgroundColor: '#111',
+        position: 'relative',
+      }}
     >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-    </MapContainer>
+      <MapContainer
+        center={[-1.2921, 36.8219]} // Nairobi, Kenya
+        zoom={8}
+        style={{ height: '100%', width: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+      </MapContainer>
+    </div>
   );
 }
