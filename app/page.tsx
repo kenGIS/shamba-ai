@@ -121,7 +121,7 @@ export default function Home() {
         </div>
 
         {/* Map */}
-        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg h-[50vh]">
           {memoizedMap}
         </div>
       </div>
