@@ -7,27 +7,51 @@ export async function POST(req: Request) {
     // Parse the incoming request to get the user prompt
     const { prompt } = await req.json();
 
-    if (!prompt) {
-      return new Response(JSON.stringify({ error: "No prompt provided" }), { status: 400 });
+    // Validate the prompt
+    if (!prompt || typeof prompt !== "string") {
+      console.error("Invalid or missing prompt");
+      return new Response(JSON.stringify({ error: "Invalid or missing prompt" }), {
+        status: 400,
+      });
     }
+
+    // Debugging: Log the received prompt
+    console.log("Prompt received:", prompt);
+
+    // Debugging: Check if OpenAI API Key is present
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("OpenAI API Key is missing");
+      return new Response(JSON.stringify({ error: "OpenAI API Key is not set" }), {
+        status: 500,
+      });
+    }
+
+    // Log the request payload for debugging
+    console.log("Request Payload:", {
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
+    });
 
     // Call the OpenAI API
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, // Use secure API key
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4", // Specify the OpenAI model
-        messages: [{ role: "user", content: prompt }], // Send user input
-        stream: true, // Enable streaming for real-time responses
+        model: "gpt-4",
+        messages: [{ role: "user", content: prompt }],
+        stream: true,
       }),
     });
 
+    // Handle OpenAI API errors
     if (!response.ok) {
+      const error = await response.json();
+      console.error("OpenAI API Error:", error);
       return new Response(
-        JSON.stringify({ error: `OpenAI API error: ${response.statusText}` }),
+        JSON.stringify({ error: `OpenAI API error: ${error.error.message || "Unknown error"}` }),
         { status: response.status }
       );
     }
@@ -39,8 +63,9 @@ export async function POST(req: Request) {
         const reader = response.body?.getReader();
 
         if (!reader) {
+          console.error("Failed to get response reader from OpenAI");
           controller.close();
-          throw new Error("Failed to create a reader for OpenAI response.");
+          return;
         }
 
         while (true) {
@@ -58,6 +83,7 @@ export async function POST(req: Request) {
 
     return new StreamingTextResponse(stream);
   } catch (error) {
+    // General error handling
     console.error("Error in chat route:", error);
     return new Response(
       JSON.stringify({ error: "Internal server error. Please try again later." }),
