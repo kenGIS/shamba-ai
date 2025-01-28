@@ -1,26 +1,9 @@
 'use client';
-import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
-export default function Map() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <div>Loading map...</div>;
-  }
-
-  const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
-    ssr: false,
-  });
-  const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
-    ssr: false,
-  });
-
+const Map = React.memo(() => {
   return (
     <div
       style={{
@@ -42,4 +25,6 @@ export default function Map() {
       </MapContainer>
     </div>
   );
-}
+});
+
+export default Map;
