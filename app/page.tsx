@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
 const Map = dynamic(
-  () => import('@/components/map'),
+  () => import('../components/map'),
   { ssr: false, loading: () => <div className="h-full bg-gray-900/50 animate-pulse" /> }
 );
 
