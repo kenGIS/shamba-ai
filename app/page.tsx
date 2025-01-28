@@ -41,11 +41,11 @@ export default function Home() {
   const memoizedMap = useMemo(() => <Map />, []);
 
   // Placeholder data for visualizations
-  const areaLineData = {
+  const treeDensityData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Area Line Chart',
+        label: 'Tree Density Trend',
         data: [10, 15, 12, 20, 25, 18],
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -54,24 +54,23 @@ export default function Home() {
     ],
   };
 
-  const proportionalAreaData = {
-    labels: ['Segment A', 'Segment B', 'Segment C'],
+  const carbonReservoirData = {
+    labels: ['Above Ground Biomass', 'Below Ground Biomass', 'Soil Carbon'],
     datasets: [
       {
-        data: [300, 500, 200],
+        data: [300, 200, 400],
         backgroundColor: ['rgb(255, 99, 132)', 'rgb(75, 192, 192)', 'rgb(255, 205, 86)'],
       },
     ],
   };
 
-  const barChartData = {
-    labels: ['Category A', 'Category B', 'Category C', 'Category D'],
+  const landCoverData = {
+    labels: ['Forests', 'Scrubland', 'Grassland'],
     datasets: [
       {
-        label: 'Bar Chart',
-        data: [35, 45, 20, 50],
-        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        borderColor: 'rgba(54, 162, 235, 1)',
+        label: 'Land Cover Types',
+        data: [45, 30, 25],
+        backgroundColor: ['rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)'],
         borderWidth: 1,
       },
     ],
@@ -123,24 +122,27 @@ export default function Home() {
       <div className="col-span-3 grid grid-rows-2 gap-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30 p-4">
         {/* Infographics Row */}
         <div className="grid grid-cols-3 gap-4">
-          {/* Area Line Chart */}
-          <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
-            <Line data={areaLineData} />
+          {/* Tree Density Trend */}
+          <div className="bg-gray-700/50 p-3 rounded-lg flex flex-col items-center justify-center">
+            <h2 className="text-sm font-semibold text-emerald-400 mb-2">Tree Density Trend</h2>
+            <Line data={treeDensityData} />
           </div>
 
-          {/* Proportional Area Chart */}
-          <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
-            <Doughnut data={proportionalAreaData} />
+          {/* Carbon Reservoirs */}
+          <div className="bg-gray-700/50 p-3 rounded-lg flex flex-col items-center justify-center">
+            <h2 className="text-sm font-semibold text-emerald-400 mb-2">Carbon Reservoirs</h2>
+            <Doughnut data={carbonReservoirData} />
           </div>
 
-          {/* Bar Chart */}
-          <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
-            <Bar data={barChartData} />
+          {/* Land Cover Types */}
+          <div className="bg-gray-700/50 p-3 rounded-lg flex flex-col items-center justify-center">
+            <h2 className="text-sm font-semibold text-emerald-400 mb-2">Land Cover Types</h2>
+            <Bar data={landCoverData} />
           </div>
         </div>
 
         {/* Map Row */}
-        <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center h-[40vh]">
+        <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center h-[35vh]">
           {memoizedMap}
         </div>
       </div>
