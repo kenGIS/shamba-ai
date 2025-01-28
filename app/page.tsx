@@ -2,11 +2,11 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Filler, RadialLinearScale, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Line, PolarArea, Radar, Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Filler, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Line, Doughnut } from 'react-chartjs-2';
 
 // Register chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, RadialLinearScale, ArcElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ArcElement, Tooltip, Legend);
 
 const Map = dynamic(() => import('../components/map'), {
   ssr: false,
@@ -45,32 +45,11 @@ export default function Home() {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
+        label: 'Area Line Chart',
         data: [10, 15, 12, 20, 25, 18],
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,
-      },
-    ],
-  };
-
-  const radialBarData = {
-    labels: ['Category A', 'Category B', 'Category C'],
-    datasets: [
-      {
-        data: [70, 50, 90],
-        backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)'],
-      },
-    ],
-  };
-
-  const radarData = {
-    labels: ['Metric 1', 'Metric 2', 'Metric 3', 'Metric 4', 'Metric 5'],
-    datasets: [
-      {
-        data: [65, 59, 90, 81, 56],
-        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-        borderColor: 'rgb(153, 102, 255)',
-        pointBackgroundColor: 'rgb(153, 102, 255)',
       },
     ],
   };
@@ -130,21 +109,22 @@ export default function Home() {
       {/* Visualization Panel */}
       <div className="col-span-2 grid grid-cols-2 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         {/* Area Line Chart */}
-        <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <Line data={areaLineData} options={{ plugins: { legend: { display: false } } }} />
-        </div>
-
-        {/* Radial Bar Chart */}
-        <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <PolarArea data={radialBarData} options={{ plugins: { legend: { display: false } } }} />
-        </div>
-
-        {/* Radar Chart */}
-        <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <Radar data={radarData} options={{ plugins: { legend: { display: false } } }} />
+        <div className="col-span-1 bg-gray-700/50 p-4 rounded-lg h-[20vh]">
+          <h2 className="text-center text-sm text-emerald-400">Area Line Chart</h2>
+          <Line data={areaLineData} />
         </div>
 
         {/* Proportional Area Chart */}
-        <div className="bg-gray-700/50 p-2 rounded-lg h-[15vh]">
-          <Doughnut data={proportionalAreaData} options={{ plugins: { legend: { display: false } } }} />
-      
+        <div className="col-span-1 bg-gray-700/50 p-4 rounded-lg h-[20vh]">
+          <h2 className="text-center text-sm text-emerald-400">Proportional Area Chart</h2>
+          <Doughnut data={proportionalAreaData} />
+        </div>
+
+        {/* Map */}
+        <div className="col-span-2 bg-gray-700/50 p-4 rounded-lg h-[50vh]">
+          {memoizedMap}
+        </div>
+      </div>
+    </div>
+  );
+}
