@@ -107,21 +107,21 @@ export default function Home() {
       </div>
 
       {/* Visualization Panel */}
-      <div className="col-span-2 grid grid-cols-2 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
+      <div className="col-span-2 grid grid-rows-3 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         {/* Area Line Chart */}
-        <div className="col-span-1 bg-gray-700/50 p-4 rounded-lg h-[20vh]">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
           <h2 className="text-center text-sm text-emerald-400">Area Line Chart</h2>
           <Line data={areaLineData} />
         </div>
 
         {/* Proportional Area Chart */}
-        <div className="col-span-1 bg-gray-700/50 p-4 rounded-lg h-[20vh]">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
           <h2 className="text-center text-sm text-emerald-400">Proportional Area Chart</h2>
           <Doughnut data={proportionalAreaData} />
         </div>
 
         {/* Map */}
-        <div className="col-span-2 bg-gray-700/50 p-4 rounded-lg h-[50vh]">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
           {memoizedMap}
         </div>
       </div>
