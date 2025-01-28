@@ -2,11 +2,11 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Filler, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Line, Doughnut, PolarArea } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointElement, LineElement, Filler, ArcElement } from 'chart.js';
+import { Line, Doughnut, Bar } from 'react-chartjs-2';
 
 // Register chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ArcElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointElement, LineElement, Filler, ArcElement);
 
 const Map = dynamic(() => import('../components/map'), {
   ssr: false,
@@ -64,12 +64,15 @@ export default function Home() {
     ],
   };
 
-  const polarAreaData = {
-    labels: ['Category A', 'Category B', 'Category C'],
+  const barChartData = {
+    labels: ['Category A', 'Category B', 'Category C', 'Category D'],
     datasets: [
       {
-        data: [35, 45, 20],
-        backgroundColor: ['rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(255, 99, 132)'],
+        label: 'Bar Chart',
+        data: [35, 45, 20, 50],
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
       },
     ],
   };
@@ -130,9 +133,9 @@ export default function Home() {
             <Doughnut data={proportionalAreaData} />
           </div>
 
-          {/* Polar Area Chart */}
+          {/* Bar Chart */}
           <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
-            <PolarArea data={polarAreaData} />
+            <Bar data={barChartData} />
           </div>
         </div>
 
