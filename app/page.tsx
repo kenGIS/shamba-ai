@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Filler, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Line, Doughnut } from 'react-chartjs-2';
+import { Line, Doughnut, PolarArea } from 'react-chartjs-2';
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ArcElement, Tooltip, Legend);
@@ -64,10 +64,20 @@ export default function Home() {
     ],
   };
 
+  const polarAreaData = {
+    labels: ['Category A', 'Category B', 'Category C'],
+    datasets: [
+      {
+        data: [35, 45, 20],
+        backgroundColor: ['rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(255, 99, 132)'],
+      },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 grid grid-cols-5 gap-4 p-4">
+    <div className="min-h-screen bg-gray-900 grid grid-cols-4 gap-4 p-4">
       {/* Chat Panel */}
-      <div className="col-span-2 flex flex-col space-y-4 p-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
+      <div className="col-span-1 flex flex-col space-y-4 p-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         <h1 className="text-2xl font-bold text-emerald-400">SHAMBA.AI</h1>
 
         {/* Chat Messages */}
@@ -107,19 +117,27 @@ export default function Home() {
       </div>
 
       {/* Visualization Panel */}
-      <div className="col-span-3 grid grid-rows-3 gap-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30 p-4">
-        {/* Area Line Chart */}
-        <div className="row-span-1 bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
-          <Line data={areaLineData} />
+      <div className="col-span-3 grid grid-rows-2 gap-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30 p-4">
+        {/* Infographics Row */}
+        <div className="grid grid-cols-3 gap-4">
+          {/* Area Line Chart */}
+          <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
+            <Line data={areaLineData} />
+          </div>
+
+          {/* Proportional Area Chart */}
+          <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
+            <Doughnut data={proportionalAreaData} />
+          </div>
+
+          {/* Polar Area Chart */}
+          <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
+            <PolarArea data={polarAreaData} />
+          </div>
         </div>
 
-        {/* Proportional Area Chart */}
-        <div className="row-span-1 bg-gray-700/50 p-3 rounded-lg flex items-center justify-center">
-          <Doughnut data={proportionalAreaData} />
-        </div>
-
-        {/* Map */}
-        <div className="row-span-1 bg-gray-700/50 p-3 rounded-lg">
+        {/* Map Row */}
+        <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center h-[35vh]">
           {memoizedMap}
         </div>
       </div>
