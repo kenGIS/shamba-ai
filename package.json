@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@vercel/ai": "^2.2.3",
     "ai": "^3.3.4",
     "framer-motion": "^10.18.0",
     "leaflet": "^1.9.4",
