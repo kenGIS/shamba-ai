@@ -140,7 +140,7 @@ export default function Home() {
         </div>
 
         {/* Map Row */}
-        <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center h-[35vh]">
+        <div className="bg-gray-700/50 p-3 rounded-lg flex items-center justify-center h-[40vh]">
           {memoizedMap}
         </div>
       </div>
