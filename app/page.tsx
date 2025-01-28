@@ -65,13 +65,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 grid grid-cols-3 gap-4 p-4">
+    <div className="min-h-screen bg-gray-900 grid grid-cols-4 gap-4 p-4">
       {/* Chat Panel */}
-      <div className="col-span-1 space-y-6 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
+      <div className="col-span-1 space-y-6 p-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
         <h1 className="text-3xl font-bold text-emerald-400">SHAMBA.AI</h1>
 
         {/* Chat Messages */}
-        <div className="h-[70vh] overflow-y-auto space-y-4">
+        <div className="h-[65vh] overflow-y-auto space-y-4">
           {messages.map((msg, index) => (
             <motion.div
               key={index}
@@ -107,21 +107,21 @@ export default function Home() {
       </div>
 
       {/* Visualization Panel */}
-      <div className="col-span-2 grid grid-cols-2 gap-4 p-6 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30">
+      <div className="col-span-3 grid grid-rows-3 gap-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-emerald-500/30 p-4">
         {/* Area Line Chart */}
-        <div className="col-span-1 bg-gray-700/50 p-4 rounded-lg h-[20vh]">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
           <h2 className="text-center text-sm text-emerald-400">Area Line Chart</h2>
           <Line data={areaLineData} />
         </div>
 
         {/* Proportional Area Chart */}
-        <div className="col-span-1 bg-gray-700/50 p-4 rounded-lg h-[20vh]">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
           <h2 className="text-center text-sm text-emerald-400">Proportional Area Chart</h2>
           <Doughnut data={proportionalAreaData} />
         </div>
 
         {/* Map */}
-        <div className="col-span-2 bg-gray-700/50 p-4 rounded-lg h-[50vh]">
+        <div className="row-span-1 bg-gray-700/50 p-4 rounded-lg">
           {memoizedMap}
         </div>
       </div>
