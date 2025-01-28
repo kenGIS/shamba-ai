@@ -1,12 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
-const Map = dynamic(
-  () => import('../components/map'),
-  { ssr: false, loading: () => <div className="h-full bg-gray-900/50 animate-pulse" /> }
-);
+const Map = dynamic(() => import('../components/map'), {
+  ssr: false,
+  loading: () => <div className="h-full bg-gray-900/50 animate-pulse" />,
+});
 
 export default function Home() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
@@ -32,7 +32,7 @@ export default function Home() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: input }), // Send the prompt as JSON
+        body: JSON.stringify({ prompt: input }),
       });
 
       if (!response.ok) {
@@ -46,17 +46,16 @@ export default function Home() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let done = false;
-      let aiResponse = ""; // Accumulate the AI's response
+      let aiResponse = "";
 
-      while (!done) {
-        const { value, done: readerDone } = await reader.read();
-        done = readerDone;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
         aiResponse += decoder.decode(value, { stream: true });
 
         // Update the assistant's response in real-time
         setMessages((prev) => {
-          // Check if there's already an assistant response being updated
           const lastMessage = prev.find((msg) => msg.role === "assistant");
           if (lastMessage) {
             lastMessage.content = aiResponse;
@@ -74,6 +73,9 @@ export default function Home() {
       ]);
     }
   };
+
+  // Memoize the Map component
+  const memoizedMap = useMemo(() => <Map />, []);
 
   return (
     <div className="min-h-screen bg-gray-900 grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
@@ -119,7 +121,7 @@ export default function Home() {
 
       {/* Map Panel */}
       <div className="lg:col-span-1 relative">
-        <Map />
+        {memoizedMap}
       </div>
     </div>
   );
