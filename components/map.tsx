@@ -27,7 +27,7 @@ export default function Map() {
       }}
     >
       <MapContainer
-        center={[-1.065, 37.135]} // Coordinates for Kilimambogo area
+        center={[-1.065, 37.135]} // Coordinates for Kilimambogo area Kenya
         zoom={13} // Zoom level
         style={{ height: '100%', width: '100%' }}
       >
