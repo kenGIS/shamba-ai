@@ -27,12 +27,10 @@ export default function Map() {
         attribution="© OpenStreetMap contributors"
       />
 
-      {/* Fixed Heatmap Layer */}
+      {/* Corrected Heatmap Layer */}
       <HeatmapLayer
-        points={heatmapData}
-        longitudeExtractor={(m) => m[1]}
-        latitudeExtractor={(m) => m[0]}
-        intensityExtractor={(m) => m[2]}
+        fitBounds={true} // Ensures map fits around heatmap points
+        data={heatmapData} // Passes heatmap data correctly
         radius={20} // Heatmap point radius
         blur={15} // Blurring effect
         max={1.0} // Max intensity
