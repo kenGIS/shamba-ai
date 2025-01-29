@@ -44,13 +44,16 @@ export async function POST(req: Request) {
     const messages = await openai.beta.threads.messages.list(threadId);
     const aiResponse = messages.data.find(m => m.role === 'assistant');
 
-    // Ensure the response is correctly formatted
+    // Extract text-based content properly
     let content = "I'm here to help!";
     if (aiResponse?.content) {
       if (Array.isArray(aiResponse.content)) {
-        content = aiResponse.content.map(c => (typeof c === 'string' ? c : c.text)).join(" ");
+        content = aiResponse.content
+          .map(c => (typeof c === 'string' ? c : ('text' in c ? c.text : '')))
+          .filter(text => text) // Remove empty strings
+          .join(" ");
       } else {
-        content = aiResponse.content;
+        content = typeof aiResponse.content === 'string' ? aiResponse.content : content;
       }
     }
 
