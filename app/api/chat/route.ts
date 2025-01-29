@@ -4,14 +4,22 @@ import { StreamingTextResponse } from 'ai';
 export const runtime = 'edge'; // Optimized for Vercel Edge Functions
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID;
+
+if (!ASSISTANT_ID) {
+  throw new Error("Missing required environment variable: OPENAI_ASSISTANT_ID");
+}
 
 export async function POST(req: Request) {
   try {
     const { prompt, thread_id } = await req.json();
+
     if (!prompt) {
       return new Response(JSON.stringify({ error: 'Missing prompt' }), { status: 400 });
     }
+
+    console.log("Assistant ID in use:", ASSISTANT_ID); // Debugging log
 
     // Ensure the thread exists or create one
     let threadId = thread_id;
