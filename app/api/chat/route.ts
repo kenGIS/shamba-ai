@@ -57,11 +57,16 @@ export async function POST(req: Request) {
     if (aiResponse?.content) {
       if (Array.isArray(aiResponse.content)) {
         content = aiResponse.content
-          .map(c => ('text' in c ? (c as { text: string }).text : ''))
+          .map(c => {
+            if (typeof c === "object" && "text" in c && typeof c.text === "string") {
+              return c.text;
+            }
+            return "";
+          })
           .filter(text => text)
           .join(" ");
-      } else if (typeof aiResponse.content === 'object' && 'text' in aiResponse.content) {
-        content = (aiResponse.content as { text: string }).text;
+      } else if (typeof aiResponse.content === "object" && "text" in aiResponse.content) {
+        content = typeof aiResponse.content.text === "string" ? aiResponse.content.text : "";
       }
     }
 
