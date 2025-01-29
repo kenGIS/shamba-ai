@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -24,6 +24,7 @@ export default function Map() {
     >
       {/* Layer Selection Control */}
       <LayersControl position="topright">
+        {/* Base Map Options */}
         <LayersControl.BaseLayer checked name="OpenStreetMap">
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -37,10 +38,12 @@ export default function Map() {
             attribution="© OpenTopoMap contributors"
           />
         </LayersControl.BaseLayer>
-      </LayersControl>
 
-      {/* Heatmap Layer */}
-      <HeatmapLayer heatmapData={heatmapData} />
+        {/* Heatmap Layer */}
+        <LayersControl.Overlay checked name="Heatmap">
+          <HeatmapLayer heatmapData={heatmapData} />
+        </LayersControl.Overlay>
+      </LayersControl>
     </MapContainer>
   );
 }
@@ -48,6 +51,7 @@ export default function Map() {
 // Component to Add Heatmap Layer Using Leaflet.heat
 function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][] }) {
   const map = useMap();
+  const [heatLayer, setHeatLayer] = useState<L.Layer | null>(null);
 
   useEffect(() => {
     if (!map || heatmapData.length === 0) return;
@@ -55,18 +59,28 @@ function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][]
     // Ensure heatmap data is formatted correctly
     const formattedData = heatmapData.map(([lat, lng, intensity]) => [lat, lng, intensity || 0.5]);
 
+    // Remove existing heatmap before adding a new one (to prevent duplicates)
+    if (heatLayer) {
+      map.removeLayer(heatLayer);
+    }
+
     // Create heatmap layer
-    const heatLayer = (L as any).heatLayer(formattedData, {
-      radius: 20, // Adjust radius for visibility
-      blur: 15,
-      max: 1.0, // Ensuring visibility
+    const newHeatLayer = (L as any).heatLayer(formattedData, {
+      radius: 30,  // Increase for visibility
+      blur: 25,    // Adjust blur for smoothness
+      maxZoom: 15, // Ensure it appears at different zoom levels
+      minOpacity: 0.5, // Ensures heatmap visibility even at low intensity
     });
 
-    heatLayer.addTo(map);
+    // Add new heatmap to the map
+    newHeatLayer.addTo(map);
+    setHeatLayer(newHeatLayer);
 
     // Cleanup function to remove the heatmap when component unmounts
     return () => {
-      map.removeLayer(heatLayer);
+      if (map.hasLayer(newHeatLayer)) {
+        map.removeLayer(newHeatLayer);
+      }
     };
   }, [map, heatmapData]);
 
