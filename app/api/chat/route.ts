@@ -11,6 +11,9 @@ if (!ASSISTANT_ID) {
   throw new Error("Missing required environment variable: OPENAI_ASSISTANT_ID");
 }
 
+// Define the expected structure of AI response content
+type TextContentBlock = { text: string };
+
 export async function POST(req: Request) {
   try {
     const { prompt, thread_id } = await req.json();
@@ -57,16 +60,11 @@ export async function POST(req: Request) {
     if (aiResponse?.content) {
       if (Array.isArray(aiResponse.content)) {
         content = aiResponse.content
-          .map(c => {
-            if (typeof c === "object" && "text" in c && typeof c.text === "string") {
-              return c.text;
-            }
-            return "";
-          })
+          .map(c => ("text" in (c as TextContentBlock) ? (c as TextContentBlock).text : ""))
           .filter(text => text)
           .join(" ");
       } else if (typeof aiResponse.content === "object" && "text" in aiResponse.content) {
-        content = typeof aiResponse.content.text === "string" ? aiResponse.content.text : "";
+        content = (aiResponse.content as TextContentBlock).text || "";
       }
     }
 
