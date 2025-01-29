@@ -2,9 +2,9 @@
 
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
-import HeatmapLayer from 'react-leaflet-heat-layer';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import 'leaflet.heat';
 
 export default function Map() {
   // Placeholder heatmap data [latitude, longitude, intensity]
@@ -28,30 +28,31 @@ export default function Map() {
         attribution="© OpenStreetMap contributors"
       />
 
-      {/* Heatmap Layer */}
-      <HeatmapLayer
-        data={heatmapData}
-        radius={20} // Heatmap point radius
-        blur={15} // Blurring effect
-        max={1.0} // Max intensity
-      />
-
-      {/* Component to Auto-Fit Map Bounds to Heatmap Data */}
-      <FitMapToBounds heatmapData={heatmapData} />
+      {/* Heatmap Layer Component */}
+      <HeatmapLayer heatmapData={heatmapData} />
     </MapContainer>
   );
 }
 
-// Function to Fit the Map View to Heatmap Bounds
-function FitMapToBounds({ heatmapData }: { heatmapData: number[][] }) {
+// Component to Add Heatmap Layer Using Leaflet.heat
+function HeatmapLayer({ heatmapData }: { heatmapData: number[][] }) {
   const map = useMap();
 
   useEffect(() => {
     if (!map || heatmapData.length === 0) return;
 
-    const bounds = L.latLngBounds(heatmapData.map((point) => [point[0], point[1]]));
-    map.fitBounds(bounds, { padding: [20, 20] });
+    const heatLayer = L.heatLayer(heatmapData, {
+      radius: 25, // Adjust radius as needed
+      blur: 15,
+      maxZoom: 17,
+    });
 
+    heatLayer.addTo(map);
+
+    // Cleanup function to remove the heatmap when component unmounts
+    return () => {
+      map.removeLayer(heatLayer);
+    };
   }, [map, heatmapData]);
 
   return null;
