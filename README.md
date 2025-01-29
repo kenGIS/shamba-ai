@@ -1,6 +1,3 @@
-Here’s a **detailed README** for your **Shamba AI** repo:  
-
----
 
 ### **🚀 Shamba AI - AI-Powered Climate Insights**  
 **🌍 AI-driven platform for geospatial & climate intelligence**  
