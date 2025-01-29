@@ -23,7 +23,8 @@
     "@types/leaflet": "^1.9.8",
     "chart.js": "^4.3.0",
     "react-chartjs-2": "^5.2.0",
-    "openai": "^4.0.0"
+    "openai": "^4.0.0",
+    "react-leaflet-heatmap-layer-v3": "^3.0.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.3.2",
