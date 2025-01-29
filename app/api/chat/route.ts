@@ -13,6 +13,7 @@ if (!ASSISTANT_ID) {
 
 // Define the expected structure of AI response content
 type TextContentBlock = { text: string };
+type MessageContent = TextContentBlock | { [key: string]: any }; // Catch-all for unexpected structures
 
 export async function POST(req: Request) {
   try {
@@ -60,11 +61,17 @@ export async function POST(req: Request) {
     if (aiResponse?.content) {
       if (Array.isArray(aiResponse.content)) {
         content = aiResponse.content
-          .map(c => ("text" in (c as TextContentBlock) ? (c as TextContentBlock).text : ""))
+          .map((c) => {
+            if (typeof c === "object" && "text" in c && typeof (c as TextContentBlock).text === "string") {
+              return (c as TextContentBlock).text;
+            }
+            return ""; // Ignore non-text content
+          })
           .filter(text => text)
           .join(" ");
       } else if (typeof aiResponse.content === "object" && "text" in aiResponse.content) {
-        content = (aiResponse.content as TextContentBlock).text || "";
+        const textContent = aiResponse.content as MessageContent;
+        content = typeof textContent.text === "string" ? textContent.text : "";
       }
     }
 
