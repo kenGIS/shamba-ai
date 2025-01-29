@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet.heat';
@@ -22,13 +22,24 @@ export default function Map() {
       zoom={13}
       style={{ height: '100%', width: '100%' }}
     >
-      {/* Base Map Layer */}
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="© OpenStreetMap contributors"
-      />
+      {/* Layer Selection Control */}
+      <LayersControl position="topright">
+        <LayersControl.BaseLayer checked name="OpenStreetMap">
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="© OpenStreetMap contributors"
+          />
+        </LayersControl.BaseLayer>
 
-      {/* Heatmap Layer Component */}
+        <LayersControl.BaseLayer name="Satellite">
+          <TileLayer
+            url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+            attribution="© OpenTopoMap contributors"
+          />
+        </LayersControl.BaseLayer>
+      </LayersControl>
+
+      {/* Heatmap Layer */}
       <HeatmapLayer heatmapData={heatmapData} />
     </MapContainer>
   );
@@ -41,11 +52,14 @@ function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][]
   useEffect(() => {
     if (!map || heatmapData.length === 0) return;
 
+    // Ensure heatmap data is formatted correctly
+    const formattedData = heatmapData.map(([lat, lng, intensity]) => [lat, lng, intensity || 0.5]);
+
     // Create heatmap layer
-    const heatLayer = (L as any).heatLayer(heatmapData, {
-      radius: 25, // Adjust radius as needed
+    const heatLayer = (L as any).heatLayer(formattedData, {
+      radius: 20, // Adjust radius for visibility
       blur: 15,
-      maxZoom: 17,
+      max: 1.0, // Ensuring visibility
     });
 
     heatLayer.addTo(map);
