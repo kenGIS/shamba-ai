@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, LayerGroup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet.heat';
@@ -47,9 +47,11 @@ export default function Map() {
           />
         </LayersControl.BaseLayer>
 
-        {/* Heatmap Layer Toggle */}
+        {/* Heatmap Layer Toggle - Now inside LayerGroup */}
         <LayersControl.Overlay checked name="Heatmap">
-          <HeatmapLayer heatmapData={heatmapData} />
+          <LayerGroup>
+            <HeatmapLayer heatmapData={heatmapData} />
+          </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
     </MapContainer>
