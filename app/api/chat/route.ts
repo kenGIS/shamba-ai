@@ -13,18 +13,23 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: 'Missing prompt' }), { status: 400 });
     }
 
-    // Ensure the thread exists, or create one
+    // Ensure the thread exists or create one
     let threadId = thread_id;
     if (!threadId) {
       const thread = await openai.beta.threads.create();
       threadId = thread.id;
     }
 
-    // Run the assistant
+    // First, add the user message to the thread
+    await openai.beta.threads.messages.create(threadId, {
+      role: "user",
+      content: prompt,
+    });
+
+    // Then, start the assistant run
     const run = await openai.beta.threads.runs.create(threadId, {
       assistant_id: ASSISTANT_ID,
       instructions: "Respond as the Shamba AI assistant.",
-      input: [{ role: 'user', content: prompt }]
     });
 
     // Poll for completion
