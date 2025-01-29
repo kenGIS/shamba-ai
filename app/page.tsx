@@ -88,19 +88,34 @@ export default function Home() {
     ],
   };
 
+  const landCoverData = {
+    labels: ['Forest', 'Grassland', 'Agricultural Land', 'Urban'],
+    datasets: [
+      {
+        label: 'Land Cover Types',
+        data: [40, 25, 20, 15],
+        backgroundColor: ['rgb(34, 139, 34)', 'rgb(154, 205, 50)', 'rgb(255, 165, 0)', 'rgb(128, 128, 128)'],
+      },
+    ],
+  };
+
   return (
     <div className="h-screen w-full flex bg-gray-900 text-white">
       {/* Left Panel - Map and Visualizations */}
       <div className="flex-1 flex flex-col">
         <div className="h-2/3">{memoizedMap}</div>
         <div className="h-1/3 flex">
-          <div className="w-1/2 p-4">
+          <div className="w-1/3 p-4">
             <h2 className="text-lg font-bold">Tree Density Trend</h2>
             <Line data={treeDensityData} />
           </div>
-          <div className="w-1/2 p-4">
+          <div className="w-1/3 p-4">
             <h2 className="text-lg font-bold">Carbon Reservoirs</h2>
             <Doughnut data={carbonReservoirData} />
+          </div>
+          <div className="w-1/3 p-4">
+            <h2 className="text-lg font-bold">Land Cover Types</h2>
+            <Bar data={landCoverData} />
           </div>
         </div>
       </div>
