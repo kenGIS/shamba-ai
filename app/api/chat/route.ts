@@ -57,13 +57,19 @@ export async function POST(req: Request) {
     if (aiResponse?.content) {
       if (Array.isArray(aiResponse.content)) {
         content = aiResponse.content
-          .map(c => (typeof c === 'string' ? c : ('text' in c ? c.text : '')))
+          .map(c => (typeof c === 'object' && 'text' in c ? c.text : ''))
           .filter(text => text) // Remove empty strings
           .join(" ");
+      } else if (typeof aiResponse.content === 'object' && 'text' in aiResponse.content) {
+        content = aiResponse.content.text;
+      } else if (typeof aiResponse.content === 'string') {
+        content = aiResponse.content;
       } else {
-        content = typeof aiResponse.content === 'string' ? aiResponse.content : content;
+        content = JSON.stringify(aiResponse.content); // Debugging fallback
       }
     }
+
+    console.log("AI Response:", content); // Debugging log
 
     // Convert the response to a ReadableStream for streaming output
     const encoder = new TextEncoder();
