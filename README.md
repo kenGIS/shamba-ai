@@ -7,7 +7,7 @@
 ---
 
 ## **📌 About Shamba AI**  
-**Shamba AI** is an AI-powered platform designed to help users interact with satellite data and extract valuable **climate and ecological insights**. It leverages OpenAI’s Assistants API and integrates with **Shamba Network’s DMRV oracle** to provide accurate, real-time geospatial analysis.  
+**Shamba AI** is an AI-powered platform designed to help users interact with satellite data and extract valuable **climate and ecological insights**. It integrates with **Shamba Network’s DMRV oracle** to provide accurate, real-time geospatial analysis.  
 
 🌱 **Who is it for?**  
 - **Farmers** 🌾 – Get weather forecasts, soil quality insights, and crop suitability recommendations.  
@@ -33,43 +33,6 @@
 2️⃣ **Get Satellite Data Insights** – The assistant queries **Shamba Network’s DMRV oracle** for geospatial analysis.  
 3️⃣ **View Data Visualizations** – Interactive maps and infographics display key climate insights.  
 4️⃣ **Make Informed Decisions** – Farmers, policymakers, and businesses can act on real-time environmental data.  
-
----
-
-## **🛠️ Tech Stack**
-- **Frontend:** [Next.js 15](https://nextjs.org/) (React)  
-- **AI Integration:** [OpenAI Assistants API](https://platform.openai.com/)  
-- **Geospatial Data:** [Shamba Network DMRV Oracle](https://shamba.network/)  
-- **Deployment:** [Vercel](https://vercel.com/)  
-- **Visualization:** D3.js / Chart.js / GeoServer  
-
----
-
-## **🚀 Getting Started**
-### **1️⃣ Clone the Repository**
-```sh
-git clone https://github.com/kenGIS/shamba-ai.git
-cd shamba-ai
-```
-
-### **2️⃣ Install Dependencies**
-```sh
-npm install
-```
-
-### **3️⃣ Set Up Environment Variables**  
-Create a `.env.local` file in the root directory and add:
-```
-NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
-NEXT_PUBLIC_OPENAI_ASSISTANT_ID=your_assistant_id
-NEXT_PUBLIC_SHAMBA_ORACLE_API=your_shamba_oracle_endpoint
-```
-
-### **4️⃣ Run the App Locally**
-```sh
-npm run dev
-```
-Visit **`http://localhost:3000`** to start using **Shamba AI** locally.  
 
 ---
 
