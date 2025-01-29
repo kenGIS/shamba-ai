@@ -12,8 +12,7 @@ if (!ASSISTANT_ID) {
 }
 
 // Define the expected structure of AI response content
-type TextContentBlock = { text: string };
-type MessageContent = TextContentBlock | { [key: string]: any }; // Catch-all for unexpected structures
+type TextContentBlock = { text: { value: string } }; // Fix: Extract actual text from OpenAI structure
 
 export async function POST(req: Request) {
   try {
@@ -62,16 +61,16 @@ export async function POST(req: Request) {
       if (Array.isArray(aiResponse.content)) {
         content = aiResponse.content
           .map((c) => {
-            if (typeof c === "object" && "text" in c && typeof (c as TextContentBlock).text === "string") {
-              return (c as TextContentBlock).text;
+            if (typeof c === "object" && "text" in c && typeof c.text === "object" && "value" in c.text) {
+              return c.text.value; // Extract actual text value
             }
             return ""; // Ignore non-text content
           })
           .filter(text => text)
           .join(" ");
       } else if (typeof aiResponse.content === "object" && "text" in aiResponse.content) {
-        const textContent = aiResponse.content as MessageContent;
-        content = typeof textContent.text === "string" ? textContent.text : "";
+        const textContent = aiResponse.content as TextContentBlock;
+        content = textContent.text?.value || ""; // Extract actual text safely
       }
     }
 
