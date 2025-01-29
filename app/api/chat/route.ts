@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: 'Missing prompt' }), { status: 400 });
     }
 
-    console.log("Assistant ID in use:", ASSISTANT_ID); // Debugging log
+    console.log("Assistant ID in use:", ASSISTANT_ID);
 
     // Ensure the thread exists or create one
     let threadId = thread_id;
@@ -57,15 +57,11 @@ export async function POST(req: Request) {
     if (aiResponse?.content) {
       if (Array.isArray(aiResponse.content)) {
         content = aiResponse.content
-          .map(c => (typeof c === 'object' && 'text' in c ? c.text : ''))
-          .filter(text => text) // Remove empty strings
+          .map(c => ('text' in c ? (c as { text: string }).text : ''))
+          .filter(text => text)
           .join(" ");
       } else if (typeof aiResponse.content === 'object' && 'text' in aiResponse.content) {
-        content = aiResponse.content.text;
-      } else if (typeof aiResponse.content === 'string') {
-        content = aiResponse.content;
-      } else {
-        content = JSON.stringify(aiResponse.content); // Debugging fallback
+        content = (aiResponse.content as { text: string }).text;
       }
     }
 
