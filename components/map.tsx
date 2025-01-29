@@ -8,7 +8,7 @@ import 'leaflet.heat';
 
 export default function Map() {
   // Placeholder heatmap data [latitude, longitude, intensity]
-  const heatmapData = [
+  const heatmapData: [number, number, number][] = [
     [-1.286389, 36.817223, 0.8], // Nairobi
     [-1.2921, 36.8219, 0.6],
     [-1.3001, 36.8133, 0.9],
@@ -35,13 +35,14 @@ export default function Map() {
 }
 
 // Component to Add Heatmap Layer Using Leaflet.heat
-function HeatmapLayer({ heatmapData }: { heatmapData: number[][] }) {
+function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][] }) {
   const map = useMap();
 
   useEffect(() => {
     if (!map || heatmapData.length === 0) return;
 
-    const heatLayer = L.heatLayer(heatmapData, {
+    // Create heatmap layer
+    const heatLayer = (L as any).heatLayer(heatmapData, {
       radius: 25, // Adjust radius as needed
       blur: 15,
       maxZoom: 17,
