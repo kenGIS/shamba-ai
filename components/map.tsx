@@ -7,21 +7,29 @@ import L from 'leaflet';
 import 'leaflet.heat';
 
 export default function Map() {
-  // Placeholder heatmap data [latitude, longitude, intensity]
+  // Expanded heatmap data to cover a larger area
   const heatmapData: [number, number, number][] = [
     [-1.286389, 36.817223, 0.8], // Nairobi
-    [-1.2921, 36.8219, 0.6],
-    [-1.3001, 36.8133, 0.9],
-    [-1.2801, 36.8313, 0.7],
-    [-1.3201, 36.8033, 0.5],
+    [-1.2921, 36.8219, 0.6], // Nairobi West
+    [-1.3001, 36.8133, 0.9], // Lavington
+    [-1.2801, 36.8313, 0.7], // Parklands
+    [-1.3201, 36.8033, 0.5], // Karen
+    [-1.2501, 36.8453, 0.4], // Runda
+    [-1.3101, 36.7853, 0.8], // Ngong
+    [-1.3351, 36.7703, 0.6], // Kikuyu
+    [-1.3651, 36.7353, 0.7], // Limuru
+    [-1.2501, 36.9053, 0.9], // Ruiru
+    [-1.2801, 36.9513, 0.6], // Thika
   ];
 
   return (
     <MapContainer
-      center={[-1.286389, 36.817223]} // Centered around Nairobi
       zoom={13}
       style={{ height: '100%', width: '100%' }}
     >
+      {/* Auto-fit map to heatmap bounds */}
+      <FitMapToBounds heatmapData={heatmapData} />
+
       {/* Layer Selection Control */}
       <LayersControl position="topright">
         {/* Base Map Options */}
@@ -39,13 +47,29 @@ export default function Map() {
           />
         </LayersControl.BaseLayer>
 
-        {/* Heatmap Layer */}
+        {/* Heatmap Layer Toggle */}
         <LayersControl.Overlay checked name="Heatmap">
           <HeatmapLayer heatmapData={heatmapData} />
         </LayersControl.Overlay>
       </LayersControl>
     </MapContainer>
   );
+}
+
+// Component to Auto-Fit Map Bounds to Heatmap Data
+function FitMapToBounds({ heatmapData }: { heatmapData: [number, number, number][] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || heatmapData.length === 0) return;
+
+    // Calculate bounds from heatmap data points
+    const bounds = L.latLngBounds(heatmapData.map(([lat, lng]) => [lat, lng]));
+    map.fitBounds(bounds, { padding: [20, 20] });
+
+  }, [map, heatmapData]);
+
+  return null;
 }
 
 // Component to Add Heatmap Layer Using Leaflet.heat
