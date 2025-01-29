@@ -1,105 +1,48 @@
+import { OpenAI } from 'openai';
 import { StreamingTextResponse } from 'ai';
 
-export const runtime = 'edge';
+export const runtime = 'edge'; // Optimized for Vercel Edge Functions
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID;
 
 export async function POST(req: Request) {
   try {
-    // Debugging: Log raw request
-    console.log("Request received:", req);
-
-    // Parse the JSON body
-    let body;
-    try {
-      body = await req.json(); // Attempt to parse the request body
-      console.log("Parsed body:", body);
-    } catch (error) {
-      console.error("Failed to parse JSON body:", error);
-      return new Response(
-        JSON.stringify({ error: "Invalid JSON in request body" }),
-        { status: 400 }
-      );
+    const { prompt, thread_id } = await req.json();
+    if (!prompt) {
+      return new Response(JSON.stringify({ error: 'Missing prompt' }), { status: 400 });
     }
 
-    const { prompt } = body;
-
-    // Validate the prompt
-    if (!prompt || typeof prompt !== "string") {
-      console.error("Invalid or missing prompt:", prompt);
-      return new Response(JSON.stringify({ error: "Invalid or missing prompt" }), {
-        status: 400,
-      });
+    // Ensure the thread exists, or create one
+    let threadId = thread_id;
+    if (!threadId) {
+      const thread = await openai.beta.threads.create();
+      threadId = thread.id;
     }
 
-    console.log("Prompt received:", prompt);
-
-    // Check if OpenAI API Key is present
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("OpenAI API Key is missing");
-      return new Response(JSON.stringify({ error: "OpenAI API Key is not set" }), {
-        status: 500,
-      });
-    }
-
-    console.log("Request Payload:", {
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
+    // Run the assistant
+    const run = await openai.beta.threads.runs.create(threadId, {
+      assistant_id: ASSISTANT_ID,
+      instructions: "Respond as the Shamba AI assistant.",
+      input: [{ role: 'user', content: prompt }]
     });
 
-    // Call the OpenAI API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        stream: true,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({
-        error: { message: "Unknown error" },
-      }));
-      console.error("OpenAI API Error:", error);
-      return new Response(
-        JSON.stringify({ error: `OpenAI API error: ${error.error.message || "Unknown error"}` }),
-        { status: response.status }
-      );
+    // Poll for completion
+    let completedRun;
+    while (true) {
+      completedRun = await openai.beta.threads.runs.retrieve(threadId, run.id);
+      if (completedRun.status === 'completed') break;
+      await new Promise((res) => setTimeout(res, 1000));
     }
 
-    // Stream the response back to the client
-    const stream = new ReadableStream({
-      async start(controller) {
-        const decoder = new TextDecoder();
-        const reader = response.body?.getReader();
+    // Get the latest message from the assistant
+    const messages = await openai.beta.threads.messages.list(threadId);
+    const aiResponse = messages.data.find(m => m.role === 'assistant');
+    const content = aiResponse?.content || "I'm here to help!";
 
-        if (!reader) {
-          console.error("Failed to create reader for OpenAI response");
-          controller.close();
-          return;
-        }
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value);
-          controller.enqueue(new TextEncoder().encode(chunk));
-        }
-
-        controller.close();
-      },
-    });
-
-    return new StreamingTextResponse(stream);
+    return new StreamingTextResponse(content);
   } catch (error) {
-    console.error("Error in chat route:", error);
-    return new Response(
-      JSON.stringify({ error: "Internal server error. Please try again later." }),
-      { status: 500 }
-    );
+    console.error('Error processing chat:', error);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
