@@ -27,10 +27,8 @@ export default function Map() {
         attribution="© OpenStreetMap contributors"
       />
 
-      {/* Heatmap Layer */}
+      {/* Fixed Heatmap Layer */}
       <HeatmapLayer
-        fitBoundsOnLoad
-        fitBoundsOnUpdate
         points={heatmapData}
         longitudeExtractor={(m) => m[1]}
         latitudeExtractor={(m) => m[0]}
