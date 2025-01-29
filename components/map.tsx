@@ -47,8 +47,8 @@ export default function Map() {
           />
         </LayersControl.BaseLayer>
 
-        {/* Heatmap Layer Toggle - Now inside LayerGroup */}
-        <LayersControl.Overlay checked name="Heatmap">
+        {/* Heatmap Layer Toggle */}
+        <LayersControl.Overlay name="Heatmap">
           <LayerGroup>
             <HeatmapLayer heatmapData={heatmapData} />
           </LayerGroup>
@@ -74,21 +74,17 @@ function FitMapToBounds({ heatmapData }: { heatmapData: [number, number, number]
   return null;
 }
 
-// Component to Add Heatmap Layer Using Leaflet.heat
+// Component to Add/Remove Heatmap Layer Using Leaflet.heat
 function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][] }) {
   const map = useMap();
   const [heatLayer, setHeatLayer] = useState<L.Layer | null>(null);
+  const [isHeatmapVisible, setIsHeatmapVisible] = useState(true); // Track visibility
 
   useEffect(() => {
     if (!map || heatmapData.length === 0) return;
 
     // Ensure heatmap data is formatted correctly
     const formattedData = heatmapData.map(([lat, lng, intensity]) => [lat, lng, intensity || 0.5]);
-
-    // Remove existing heatmap before adding a new one (to prevent duplicates)
-    if (heatLayer) {
-      map.removeLayer(heatLayer);
-    }
 
     // Create heatmap layer
     const newHeatLayer = (L as any).heatLayer(formattedData, {
@@ -98,9 +94,8 @@ function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][]
       minOpacity: 0.5, // Ensures heatmap visibility even at low intensity
     });
 
-    // Add new heatmap to the map
-    newHeatLayer.addTo(map);
     setHeatLayer(newHeatLayer);
+    if (isHeatmapVisible) newHeatLayer.addTo(map);
 
     // Cleanup function to remove the heatmap when component unmounts
     return () => {
@@ -108,7 +103,32 @@ function HeatmapLayer({ heatmapData }: { heatmapData: [number, number, number][]
         map.removeLayer(newHeatLayer);
       }
     };
-  }, [map, heatmapData]);
+  }, [map, heatmapData, isHeatmapVisible]);
+
+  // Listen for changes in `LayersControl` to toggle heatmap visibility
+  useEffect(() => {
+    const handleOverlayAdd = (e: L.LayersControlEvent) => {
+      if (e.name === 'Heatmap') {
+        setIsHeatmapVisible(true);
+        if (heatLayer) heatLayer.addTo(map);
+      }
+    };
+
+    const handleOverlayRemove = (e: L.LayersControlEvent) => {
+      if (e.name === 'Heatmap') {
+        setIsHeatmapVisible(false);
+        if (heatLayer) map.removeLayer(heatLayer);
+      }
+    };
+
+    map.on('overlayadd', handleOverlayAdd);
+    map.on('overlayremove', handleOverlayRemove);
+
+    return () => {
+      map.off('overlayadd', handleOverlayAdd);
+      map.off('overlayremove', handleOverlayRemove);
+    };
+  }, [map, heatLayer]);
 
   return null;
 }
