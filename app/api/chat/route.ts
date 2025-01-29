@@ -43,9 +43,27 @@ export async function POST(req: Request) {
     // Get the latest message from the assistant
     const messages = await openai.beta.threads.messages.list(threadId);
     const aiResponse = messages.data.find(m => m.role === 'assistant');
-    const content = aiResponse?.content || "I'm here to help!";
 
-    return new StreamingTextResponse(content);
+    // Ensure the response is correctly formatted
+    let content = "I'm here to help!";
+    if (aiResponse?.content) {
+      if (Array.isArray(aiResponse.content)) {
+        content = aiResponse.content.map(c => (typeof c === 'string' ? c : c.text)).join(" ");
+      } else {
+        content = aiResponse.content;
+      }
+    }
+
+    // Convert the response to a ReadableStream for streaming output
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(encoder.encode(content));
+        controller.close();
+      },
+    });
+
+    return new StreamingTextResponse(stream);
   } catch (error) {
     console.error('Error processing chat:', error);
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
