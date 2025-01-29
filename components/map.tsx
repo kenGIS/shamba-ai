@@ -1,43 +1,71 @@
 'use client';
-
-import { MapContainer, TileLayer } from 'react-leaflet';
-import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
+import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, LayersControl } from 'react-leaflet';
+
+const { BaseLayer, Overlay } = LayersControl;
 
 export default function Map() {
-  // Placeholder heatmap data (latitude, longitude, intensity)
-  const heatmapData = [
-    { lat: -1.286389, lng: 36.817223, intensity: 0.8 }, // Nairobi
-    { lat: -1.2921, lng: 36.8219, intensity: 0.6 }, // Another point in Nairobi
-    { lat: -1.3001, lng: 36.8133, intensity: 0.9 }, // Another point
-    { lat: -1.2801, lng: 36.8313, intensity: 0.7 }, // Another point
-    { lat: -1.3201, lng: 36.8033, intensity: 0.5 }, // Another point
-  ];
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <div>Loading map...</div>;
+  }
 
   return (
-    <MapContainer
-      center={[-1.286389, 36.817223]} // Centered around Nairobi
-      zoom={13}
-      style={{ height: '100%', width: '100%' }}
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        backgroundColor: '#111',
+        position: 'relative',
+      }}
     >
-      {/* Base Map Layer */}
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="© OpenStreetMap contributors"
-      />
+      <MapContainer
+        center={[-1.065, 37.135]} // Coordinates for Kilimambogo area Kenya
+        zoom={13} // Zoom level
+        style={{ height: '100%', width: '100%' }}
+      >
+        <LayersControl position="topright">
+          {/* OpenStreetMap Basemap */}
+          <BaseLayer checked name="OpenStreetMap">
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+          </BaseLayer>
 
-      {/* Heatmap Layer */}
-      <HeatmapLayer
-        fitBoundsOnLoad
-        fitBoundsOnUpdate
-        points={heatmapData}
-        longitudeExtractor={(p) => p.lng}
-        latitudeExtractor={(p) => p.lat}
-        intensityExtractor={(p) => p.intensity}
-        radius={20} // Heatmap point radius
-        blur={25} // Blurring effect
-        max={1} // Max intensity
-      />
-    </MapContainer>
+          {/* Google Earth Imagery (Satellite Only) */}
+          <BaseLayer name="Google Earth Imagery">
+            <TileLayer
+              url="http://www.google.cn/maps/vt?lyrs=s&x={x}&y={y}&z={z}"
+              attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+            />
+          </BaseLayer>
+
+          {/* Google Earth Hybrid (Satellite + Labels) */}
+          <BaseLayer name="Google Earth Hybrid">
+            <TileLayer
+              url="http://www.google.cn/maps/vt?lyrs=y&x={x}&y={y}&z={z}"
+              attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+            />
+          </BaseLayer>
+
+          {/* Dummy Heatmap Layer */}
+          <Overlay name="Thematic Heatmap">
+            <TileLayer
+              url="https://stamen-tiles.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://stamen.com/">Stamen Design</a>'
+              opacity={0.7} // Slight transparency for overlay effect
+            />
+          </Overlay>
+        </LayersControl>
+      </MapContainer>
+    </div>
   );
 }
