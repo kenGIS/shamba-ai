@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import HeatmapLayer from 'react-leaflet-heat-layer';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
 export default function Map() {
   // Placeholder heatmap data [latitude, longitude, intensity]
@@ -27,14 +28,31 @@ export default function Map() {
         attribution="© OpenStreetMap contributors"
       />
 
-      {/* Corrected Heatmap Layer */}
+      {/* Heatmap Layer */}
       <HeatmapLayer
-        fitBounds={true} // Ensures map fits around heatmap points
-        data={heatmapData} // Passes heatmap data correctly
+        data={heatmapData}
         radius={20} // Heatmap point radius
         blur={15} // Blurring effect
         max={1.0} // Max intensity
       />
+
+      {/* Component to Auto-Fit Map Bounds to Heatmap Data */}
+      <FitMapToBounds heatmapData={heatmapData} />
     </MapContainer>
   );
+}
+
+// Function to Fit the Map View to Heatmap Bounds
+function FitMapToBounds({ heatmapData }: { heatmapData: number[][] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || heatmapData.length === 0) return;
+
+    const bounds = L.latLngBounds(heatmapData.map((point) => [point[0], point[1]]));
+    map.fitBounds(bounds, { padding: [20, 20] });
+
+  }, [map, heatmapData]);
+
+  return null;
 }
