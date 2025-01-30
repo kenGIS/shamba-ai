@@ -165,19 +165,19 @@ export default function Home() {
       <div className="w-1/3 flex flex-col border-l border-gray-700">
         <div className="flex-1 p-6 overflow-auto">
           {messages.map((msg, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className={`p-3 rounded-lg mb-2 max-w-md ${
-                msg.role === "user" ? "bg-blue-600 self-end" : "bg-gray-700 self-start"
-              }`}
+            <motion.div key={index} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
+              className={`p-3 rounded-lg mb-2 max-w-md ${msg.role === "user" ? "bg-blue-600 self-end" : "bg-gray-700 self-start"}`}
             >
               {msg.content}
             </motion.div>
           ))}
         </div>
+
+        <form onSubmit={handleSubmit} className="p-4 flex bg-gray-800 border-t border-gray-700">
+          <input type="text" value={input} onChange={handleInputChange} placeholder="Ask Shamba AI..."
+            className="flex-1 p-2 rounded bg-gray-700 text-white outline-none" />
+          <button type="submit" className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded">Send</button>
+        </form>
       </div>
     </div>
   );
