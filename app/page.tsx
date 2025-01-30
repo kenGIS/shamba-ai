@@ -13,14 +13,15 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointE
 // Dynamically import the Map component
 const Map = dynamic(() => import('../components/map'), {
   ssr: false,
-  loading: () => <div className="h-full bg-gray-900/50 animate-pulse" />, 
+  loading: () => <div className="h-full bg-gray-900/50 animate-pulse" />,
 });
 
 export default function Home() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [threadId, setThreadId] = useState<string | null>(null); // Store thread ID
+  const [threadId, setThreadId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'Insights' | 'Risks' | 'Carbon' | 'Biodiversity' | 'Agriculture'>('Insights');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -55,7 +56,7 @@ export default function Home() {
         const { done, value } = await reader.read();
         if (done) break;
         aiMessage += decoder.decode(value, { stream: true });
-        setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: aiMessage }]); // Updates chat in real-time
+        setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: aiMessage }]);
       }
     }
 
@@ -65,7 +66,7 @@ export default function Home() {
   // Memoized Map for performance
   const memoizedMap = useMemo(() => <Map />, []);
 
-  // Placeholder data for visualizations
+  // Placeholder data for visualizations (unchanged from original)
   const treeDensityData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -102,9 +103,29 @@ export default function Home() {
 
   return (
     <div className="h-screen w-full flex bg-gray-900 text-white">
-      {/* Left Panel - Navigation Bar and Map */}
+      {/* New Slim Sidebar */}
+      <div className="w-48 bg-gray-800 border-r border-gray-700 flex flex-col">
+        <div className="p-4 text-sm font-medium border-b border-gray-700">Analysis Categories</div>
+        <div className="flex-1 space-y-1 p-2">
+          {['Insights', 'Risks', 'Carbon', 'Biodiversity', 'Agriculture'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`w-full px-3 py-2 text-left rounded-md text-sm transition-colors
+                ${activeTab === tab 
+                  ? 'bg-gray-700/50 border-l-2 border-green-400' 
+                  : 'hover:bg-gray-700/30 hover:border-l-2 hover:border-gray-500'}
+                `}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Original Left Panel Content */}
       <div className="flex-1 flex flex-col">
-        {/* Navigation Bar */}
+        {/* Navigation Bar (unchanged) */}
         <nav className="w-full bg-gray-800 p-4 shadow-lg flex justify-between items-center">
           <h1 className="text-xl font-bold">Shamba.ai</h1>
           <div className="flex space-x-4">
@@ -114,8 +135,10 @@ export default function Home() {
           </div>
         </nav>
         
-        {/* Map Section */}
+        {/* Map Section (unchanged) */}
         <div className="h-2/3">{memoizedMap}</div>
+        
+        {/* Visualization Charts (unchanged) */}
         <div className="h-1/3 flex">
           <div className="w-1/3 p-4">
             <h2 className="text-lg font-bold">Tree Density Trend</h2>
@@ -132,7 +155,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Right Panel - AI Chat */}
+      {/* Right Panel - AI Chat (completely unchanged) */}
       <div className="w-1/3 flex flex-col border-l border-gray-700">
         <div className="flex-1 p-6 overflow-auto">
           {messages.map((msg, index) => (
