@@ -96,7 +96,7 @@ export default function Home() {
     datasets: [
       {
         label: 'Land Cover Types',
-        data: [40, 25, 20, 15],
+        data: [15, 15, 10, 60],
         backgroundColor: ['rgb(34, 139, 34)', 'rgb(154, 205, 50)', 'rgb(255, 165, 0)', 'rgb(128, 128, 128)'],
       },
     ],
