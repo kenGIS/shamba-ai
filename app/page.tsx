@@ -82,7 +82,7 @@ export default function Home() {
   };
 
   const carbonReservoirData = {
-    //labels: ['Above Ground Biomass', 'Below Ground Biomass', 'Soil Carbon'],
+    labels: ['Above Ground Biomass', 'Below Ground Biomass', 'Soil Carbon'],
     datasets: [
       {
         data: [300, 200, 400],
