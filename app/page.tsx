@@ -72,7 +72,7 @@ export default function Home() {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Tree Density Trend',
+        //label: 'Tree Density Trend',
         data: [10, 15, 12, 20, 25, 18],
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -82,7 +82,7 @@ export default function Home() {
   };
 
   const carbonReservoirData = {
-    labels: ['Above Ground Biomass', 'Below Ground Biomass', 'Soil Carbon'],
+    //labels: ['Above Ground Biomass', 'Below Ground Biomass', 'Soil Carbon'],
     datasets: [
       {
         data: [300, 200, 400],
@@ -95,7 +95,7 @@ export default function Home() {
     labels: ['Forest', 'Grassland', 'Agricultural Land', 'Urban'],
     datasets: [
       {
-        label: 'Land Cover Types',
+        //label: 'Land Cover Types',
         data: [40, 25, 20, 15],
         backgroundColor: ['rgb(34, 139, 34)', 'rgb(154, 205, 50)', 'rgb(255, 165, 0)', 'rgb(128, 128, 128)'],
       },
