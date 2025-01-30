@@ -103,7 +103,7 @@ export default function Home() {
   return (
     <div className="h-screen w-full flex flex-col bg-gray-900 text-white">
       {/* Top Navigation Bar */}
-      <nav className="fixed top-0 left-0 w-full bg-gray-800 p-4 shadow-lg z-50 flex justify-between items-center">
+      <nav className="fixed top-0 left-0 w-2/3 bg-gray-800 p-4 shadow-lg z-50 flex justify-between items-center">
         <h1 className="text-xl font-bold">Shamba.ai</h1>
         <div className="flex space-x-4">
           <Link href="/reports" className="hover:text-green-400">Reports</Link>
