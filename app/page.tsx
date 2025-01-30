@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointElement, LineElement, Filler, ArcElement } from 'chart.js';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
-import { LightBulbIcon, ShieldCheckIcon, CloudIcon, LeafIcon, SunIcon } from '@heroicons/react/24/outline';
+import { LightBulbIcon, ShieldCheckIcon, CloudIcon, GlobeAltIcon, SunIcon } from '@heroicons/react/24/outline';
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointElement, LineElement, Filler, ArcElement);
@@ -67,7 +67,7 @@ export default function Home() {
   // Memoized Map for performance
   const memoizedMap = useMemo(() => <Map />, []);
 
-  // Placeholder data for visualizations (unchanged from original)
+  // Placeholder data for visualizations
   const treeDensityData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -104,7 +104,7 @@ export default function Home() {
 
   return (
     <div className="h-screen w-full flex bg-gray-900 text-white">
-      {/* New Slim Sidebar */}
+      {/* Sidebar */}
       <div className="w-48 bg-gray-800 border-r border-gray-700 flex flex-col">
         <div className="p-4 text-sm font-medium border-b border-gray-700">Categories</div>
         <div className="flex-1 space-y-1 p-2">
@@ -112,7 +112,7 @@ export default function Home() {
             { name: 'Insights', icon: <LightBulbIcon className="w-5 h-5 inline mr-2" /> },
             { name: 'Risks', icon: <ShieldCheckIcon className="w-5 h-5 inline mr-2" /> },
             { name: 'Carbon', icon: <CloudIcon className="w-5 h-5 inline mr-2" /> },
-            { name: 'Biodiversity', icon: <LeafIcon className="w-5 h-5 inline mr-2" /> },
+            { name: 'Biodiversity', icon: <GlobeAltIcon className="w-5 h-5 inline mr-2" /> }, // Fixed icon
             { name: 'Agriculture', icon: <SunIcon className="w-5 h-5 inline mr-2" /> },
           ].map((tab) => (
             <button
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Original Left Panel Content */}
+      {/* Left Panel Content */}
       <div className="flex-1 flex flex-col">
         <nav className="w-full bg-gray-800 p-4 shadow-lg flex justify-between items-center">
           <h1 className="text-xl font-bold">Shamba.ai</h1>
