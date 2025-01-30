@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointElement, LineElement, Filler, ArcElement } from 'chart.js';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
+import { LightBulbIcon, ShieldCheckIcon, CloudIcon, LeafIcon, SunIcon } from '@heroicons/react/24/outline';
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, PointElement, LineElement, Filler, ArcElement);
@@ -107,17 +108,23 @@ export default function Home() {
       <div className="w-48 bg-gray-800 border-r border-gray-700 flex flex-col">
         <div className="p-4 text-sm font-medium border-b border-gray-700">Categories</div>
         <div className="flex-1 space-y-1 p-2">
-          {['Insights', 'Risks', 'Carbon', 'Biodiversity', 'Agriculture'].map((tab) => (
+          {[
+            { name: 'Insights', icon: <LightBulbIcon className="w-5 h-5 inline mr-2" /> },
+            { name: 'Risks', icon: <ShieldCheckIcon className="w-5 h-5 inline mr-2" /> },
+            { name: 'Carbon', icon: <CloudIcon className="w-5 h-5 inline mr-2" /> },
+            { name: 'Biodiversity', icon: <LeafIcon className="w-5 h-5 inline mr-2" /> },
+            { name: 'Agriculture', icon: <SunIcon className="w-5 h-5 inline mr-2" /> },
+          ].map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab as any)}
-              className={`w-full px-3 py-2 text-left rounded-md text-sm transition-colors
-                ${activeTab === tab 
+              key={tab.name}
+              onClick={() => setActiveTab(tab.name as any)}
+              className={`w-full px-3 py-2 text-left rounded-md text-sm transition-colors flex items-center
+                ${activeTab === tab.name 
                   ? 'bg-gray-700/50 border-l-2 border-green-400' 
                   : 'hover:bg-gray-700/30 hover:border-l-2 hover:border-gray-500'}
                 `}
             >
-              {tab}
+              {tab.icon} {tab.name}
             </button>
           ))}
         </div>
@@ -125,7 +132,6 @@ export default function Home() {
 
       {/* Original Left Panel Content */}
       <div className="flex-1 flex flex-col">
-        {/* Navigation Bar (unchanged) */}
         <nav className="w-full bg-gray-800 p-4 shadow-lg flex justify-between items-center">
           <h1 className="text-xl font-bold">Shamba.ai</h1>
           <div className="flex space-x-4">
@@ -135,10 +141,10 @@ export default function Home() {
           </div>
         </nav>
         
-        {/* Map Section (unchanged) */}
+        {/* Map Section */}
         <div className="h-2/3">{memoizedMap}</div>
         
-        {/* Visualization Charts (unchanged) */}
+        {/* Visualization Charts */}
         <div className="h-1/3 flex">
           <div className="w-1/3 p-4">
             <h2 className="text-lg font-bold">Tree Density Trend</h2>
@@ -155,7 +161,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Right Panel - AI Chat (completely unchanged) */}
+      {/* Right Panel - AI Chat */}
       <div className="w-1/3 flex flex-col border-l border-gray-700">
         <div className="flex-1 p-6 overflow-auto">
           {messages.map((msg, index) => (
@@ -171,21 +177,7 @@ export default function Home() {
               {msg.content}
             </motion.div>
           ))}
-          {isTyping && <div className="p-3 rounded-lg bg-gray-600 w-28">Shamba AI is typing...</div>}
         </div>
-
-        <form onSubmit={handleSubmit} className="p-4 flex bg-gray-800 border-t border-gray-700">
-          <input
-            type="text"
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Ask Shamba AI..."
-            className="flex-1 p-2 rounded bg-gray-700 text-white outline-none"
-          />
-          <button type="submit" className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded">
-            Send
-          </button>
-        </form>
       </div>
     </div>
   );
