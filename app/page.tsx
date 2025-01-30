@@ -61,7 +61,43 @@ export default function Home() {
     setIsTyping(false);
   };
 
+  // Memoized Map for performance
   const memoizedMap = useMemo(() => <Map />, []);
+
+  // Placeholder data for visualizations
+  const treeDensityData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'Tree Density Trend',
+        data: [10, 15, 12, 20, 25, 18],
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+      },
+    ],
+  };
+
+  const carbonReservoirData = {
+    labels: ['Above Ground Biomass', 'Below Ground Biomass', 'Soil Carbon'],
+    datasets: [
+      {
+        data: [300, 200, 400],
+        backgroundColor: ['rgb(255, 99, 132)', 'rgb(75, 192, 192)', 'rgb(255, 205, 86)'],
+      },
+    ],
+  };
+
+  const landCoverData = {
+    labels: ['Forest', 'Grassland', 'Agricultural Land', 'Urban'],
+    datasets: [
+      {
+        label: 'Land Cover Types',
+        data: [40, 25, 20, 15],
+        backgroundColor: ['rgb(34, 139, 34)', 'rgb(154, 205, 50)', 'rgb(255, 165, 0)', 'rgb(128, 128, 128)'],
+      },
+    ],
+  };
 
   return (
     <div className="h-screen w-full flex bg-gray-900 text-white">
