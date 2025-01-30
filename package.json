@@ -26,7 +26,8 @@
     "chart.js": "^4.3.0",
     "react-chartjs-2": "^5.2.0",
     "openai": "^4.0.0",
-    "@heroicons/react": "^2.1.1"
+    "@heroicons/react": "^2.1.1",
+    "@vercel/analytics": "^1.0.1"
   },
   "devDependencies": {
     "tailwindcss": "^3.3.2",
