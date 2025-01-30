@@ -171,6 +171,12 @@ export default function Home() {
               {msg.content}
             </motion.div>
           ))}
+          {/* Added typing indicator below */}
+          {isTyping && (
+            <div className="p-3 rounded-lg bg-gray-600 w-48 animate-pulse">
+              Shamba AI is typing...
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 flex bg-gray-800 border-t border-gray-700">
