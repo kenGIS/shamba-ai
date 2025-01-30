@@ -105,7 +105,7 @@ export default function Home() {
     <div className="h-screen w-full flex bg-gray-900 text-white">
       {/* New Slim Sidebar */}
       <div className="w-48 bg-gray-800 border-r border-gray-700 flex flex-col">
-        <div className="p-4 text-sm font-medium border-b border-gray-700">Analysis Categories</div>
+        <div className="p-4 text-sm font-medium border-b border-gray-700">Categories</div>
         <div className="flex-1 space-y-1 p-2">
           {['Insights', 'Risks', 'Carbon', 'Biodiversity', 'Agriculture'].map((tab) => (
             <button
@@ -130,7 +130,7 @@ export default function Home() {
           <h1 className="text-xl font-bold">Shamba.ai</h1>
           <div className="flex space-x-4">
             <Link href="/reports" className="hover:text-green-400">Reports</Link>
-            <Link href="/pdd" className="hover:text-green-400">PDD</Link>
+            <Link href="/pdd" className="hover:text-green-400">Data</Link>
             <Link href="/account" className="hover:text-green-400">Account</Link>
           </div>
         </nav>
