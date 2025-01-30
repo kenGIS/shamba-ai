@@ -1,5 +1,5 @@
 import '../styles/globals.css'; // Import Tailwind CSS global styles
-import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script';
 
 export default function RootLayout({
   children,
@@ -10,7 +10,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-gray-900 text-white">
         {children}
-        <Analytics />
+        {/* Vercel Analytics Tracking Script */}
+        <Script strategy="lazyOnload" src="https://vercel.com/analytics/script.js" />
       </body>
     </html>
   );
